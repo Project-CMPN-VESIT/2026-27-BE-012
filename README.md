@@ -266,3 +266,17 @@ This project has been developed as part of the Capstone Project–II academic cu
   <strong>AarogyaMitra – Understanding Mind and Body</strong><br/>
   <em>Bringing AI-driven insights closer to holistic well-being.</em>
 </p>
+
+
+### Launch Python ML Service (Optional)
+From the root directory:
+```bash
+cd ml-service
+python -m venv venv
+# Windows:
+.\venv\Scripts\activate
+# Unix/macOS:
+source venv/bin/activate
+
+pip install -r requirements.txt
+uvicorn app.main:app --port 8000 --reload
