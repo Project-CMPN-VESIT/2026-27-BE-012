@@ -188,13 +188,12 @@ The following section contains the academic documentation, presentations, resear
 | No. | Document / Deliverable | Link |
 |---:|---|---|
 | 1 | Complete Project Blackbook | [View Blackbook](https://docs.google.com/document/d/1F8LqPzgdp4-DY5ZBcnfOfMkTNUvToCdN5JbylOhult0/edit?usp=sharing) |
-| 2 | Project Logbook | [View Logbook](PASTE_LOGBOOK_LINK_HERE) |
-| 3 | Video Presentation / Project Demonstration | [Watch Video Presentation](PASTE_VIDEO_PRESENTATION_LINK_HERE) |
-| 4 | Review Presentation | [View Review Presentation](PASTE_REVIEW_PRESENTATION_LINK_HERE) |
-| 5 | Research Paper | [View Research Paper](PASTE_RESEARCH_PAPER_LINK_HERE) |
-| 6 | Research Paper Plagiarism Report | [View Plagiarism Report](PASTE_PLAGIARISM_REPORT_LINK_HERE) |
-| 7 | Capstone Project Report – I | [View Capstone Project Report – I](PASTE_CAPSTONE_REPORT_1_LINK_HERE) |
-| 8 | Capstone Project Report – II | [View Capstone Project Report – II](PASTE_CAPSTONE_REPORT_2_LINK_HERE) |
+| 2 | Project Logbook | [View Logbook](https://docs.google.com/document/d/1AnpPvk9r8puBi5gxEd88-LsjJLLq4b61LJn-JVfEljY/edit?usp=sharing) |
+| 3 | Video Presentation / Project Demonstration | [Watch Video Presentation](https://drive.google.com/drive/folders/1FbMWc_EcRkONfkWf--I0oJ1pR_Twpkg0?usp=sharing) |
+| 4 | Review Presentation | [View Review Presentation](https://canva.link/851ebloi8eb3h9w) |
+| 5 | Research Paper | [View Research Paper](https://drive.google.com/file/d/1tUmCj1IJ4U0_0E8VZlqQDo4m2bMZSed2/view?usp=sharing) |
+| 6 | Research Paper Plagiarism Report | [View Plagiarism Report](https://drive.google.com/file/d/1CDmnhm8rpRShDhv8u8MPUhX-EfvY0P9v/view?usp=sharing) |
+
 
 ---
 
