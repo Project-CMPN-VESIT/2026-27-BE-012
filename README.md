@@ -1,238 +1,268 @@
-# AarogyaMitra — Stateful Multi-Agent Wellness Platform (LangGraph Engine)
+# AarogyaMitra – Understanding Mind and Body
+### An Agentic AI-Powered Mental Well-Being Support System
 
-> **"Your Intelligent Companion for Holistic Well-Being"**
-
-AarogyaMitra is a real stateful multi-agent wellness platform powered by **LangGraph** as its core orchestration framework. It translates multimodal user inputs (psychometric screening, lifestyle behavior, demographics, medical context, and real-time MoveNet posture telemetry) into an adaptive, closed-loop agentic workflow.
-
----
-
-## 1. Overall Platform Architecture
-
-```
-                         USER
-                          │
-                          ▼
-                    REACT FRONTEND (Vite, Tailwind CSS, Lucide)
-                          │
-                          ▼
-             EXPRESS / NODE.JS API SERVER (REST APIs, Auth Middleware)
-                          │
-                          ▼
-                 LANGGRAPH ENGINE (StateGraph Orchestrator)
-                          │
-                          ▼
-                  SHARED GRAPH STATE (State Channels & Reducers)
-                          │
-        ┌─────────────────┼─────────────────┐
-        ▼                 ▼                 ▼
- WELLNESS             RECOVERY          PHYSICAL
- ASSESSMENT           & WELLNESS        ACTIVITY
- AGENT                AGENT             AGENT
-        │                 │                 │
-        └─────────────────┼─────────────────┘
-                          │
-                          ▼
-                    REASSESSMENT
-                          │
-                          ▼
-                   REASONING ROUTER
-                          │
-             ┌────────────┴────────────┐
-             ▼                         ▼
-     PSYCHOLOGICAL              PROFESSIONAL
-     SUPPORT AGENT              CARE NAVIGATION
-             │                         │
-             └────────────┬────────────┘
-                          │
-                          ▼
-                   WELLNESS PLAN GENERATOR
-                          │
-                          ▼
-                  MONGODB PERSISTENCE & ML SERVICE
-```
+<p align="center">
+  <strong>A Multimodal AI-Based Platform for Holistic Mental and Physical Wellness Assessment</strong>
+</p>
 
 ---
 
-## 2. Dynamic Agentic Loop
+## About the Project
 
-The system operates on an iterative **OBSERVE → REASON → ACT → OBSERVE → REASON → ACT** loop:
+**AarogyaMitra** is an Agentic AI-powered mental and physical well-being support system designed to provide users with a holistic understanding of their wellness.
 
-1. **OBSERVE**: Collect screening scores (WHO-5, PSS-10, GAD-7, PHQ-9), physical activity, lifestyle metrics, and medical profile.
-2. **REASON (LangGraph Router)**: Evaluates the shared state, domain scores, and safety flags to dynamically choose the highest priority agent node.
-3. **ACT**: The selected agent node executes (e.g. Recovery planning, MoveNet pose estimation, CBT psychoeducation chat, or Professional Care escalation).
-4. **UPDATE SHARED STATE**: The agent returns a structured output patch that updates the shared state and records an `AgentExecution` entry.
-5. **REASSESS**: The graph loops to the Reassessment Engine and Router to determine if further interventions are needed or if the final Wellness Plan should be synthesized.
+The platform integrates Machine Learning, Computer Vision, Large Language Models (LLMs), and Multi-Agent AI orchestration to assess multiple dimensions of well-being and provide personalized wellness support.
 
----
+Unlike conventional wellness applications that focus on individual aspects such as sleep, exercise, or mood tracking, AarogyaMitra combines multiple wellness indicators into a unified assessment framework.
 
-## 3. Core Technologies
+The system evaluates six key wellness domains and uses specialized AI agents to provide context-aware recommendations, supportive interactions, recovery guidance, physical activity feedback, and navigation toward professional support.
 
-* **Frontend**: React 18, Vite, Tailwind CSS, Lucide Icons, Axios.
-* **Backend**: Node.js (ES Modules), Express.js, JWT Authentication, Mongoose ODM.
-* **Orchestration**: **LangGraph** (`@langchain/langgraph` StateGraph engine, conditional edges, checkpointing, and Human-in-the-Loop pause/resume). *No Redis / No BullMQ*.
-* **Database**: MongoDB (Local or MongoDB Atlas string).
-* **Machine Learning**: Python FastAPI (`domain_regressor.joblib` multi-output regressor) + TensorFlow.js MoveNet (Thunder variant, 17 keypoints).
+**AarogyaMitra is intended as a wellness support platform and does not replace professional medical advice, clinical diagnosis, or treatment.**
 
 ---
 
-## 4. LangGraph Shared State Schema
+## Key Features
 
-The shared graph state is governed by `StateGraph` channels and annotations (`server/src/langgraph/state.js`):
-
-```javascript
-{
-  sessionId: String,
-  userId: String,
-  userName: String,
-  assessmentData: Object,
-  assessmentId: String,
-  
-  // Domain Scores (0-100 continuous)
-  mmwbi: Number,
-  riskLevel: String,
-  userFacingRiskLabel: String,
-  domainScores: {
-    physicalHealth: Number,
-    recoveryWellness: Number,
-    psychologicalWellbeing: Number,
-    socialWellbeing: Number,
-    lifestyleBalance: Number,
-    stressResilience: Number
-  },
-  psychometricScores: Object,
-  attentionFlags: Array,
-  safetyFlags: Array,
-  
-  // Domain Agent Outputs
-  recoveryWellness: Object,
-  physicalActivity: Object,
-  psychologicalSupport: Object,
-  careNavigation: Object,
-  wellnessPlan: Object,
-  
-  // Graph Control & Safety
-  activeAgent: String,
-  completedAgents: Array,
-  triggeredEvents: Array,
-  detectedFlags: Array,
-  highRiskDetected: Boolean,
-  crisisDetected: Boolean,
-  nextAction: String,
-  routerDecision: Object,
-  journeyStatus: String,
-  
-  // Human-in-the-Loop (HITL) Interruption
-  requiresUserAction: Boolean,
-  userActionType: String, // 'physical_activity' | 'psych_conversation'
-  userActionPayload: Object,
-  userActionResult: Object,
-  
-  // Loop Control
-  iterationCount: Number,
-  maxIterations: Number,
-  reassessmentCount: Number,
-  
-  recommendations: Array,
-  journeyId: String,
-  error: String
-}
-```
+- **Six-Domain Wellness Assessment:** Machine learning-based estimation of physical health, sleep recovery, psychological wellbeing, social wellbeing, lifestyle balance, and stress profile.
+- **Psychological Wellbeing Screening:** Incorporates established self-report questionnaires such as WHO-5, PSS-10, PHQ-9, and GAD-7.
+- **AI-Powered Wellness Assistant:** Supports personalized and context-aware wellness conversations.
+- **Multi-Agent AI Architecture:** Uses specialized agents for psychological support, recovery, physical activity, and professional support navigation.
+- **Yoga Posture Assessment:** Uses MoveNet-based body keypoint detection and joint-angle analysis to evaluate yoga posture against reference templates.
+- **Stateful Agent Orchestration:** Uses LangGraph to coordinate agent execution, conditional routing, and workflow state transitions.
+- **Context Management:** Uses an MCP-based context service layer for controlled wellness-context retrieval and persistence.
+- **Document Verification:** Uses OCR-based text extraction to support information consistency checking from uploaded documents.
+- **Persistent Wellness Profile:** Uses MongoDB for storing relevant user and assessment information.
+- **Personalized Recommendations:** Provides wellness-oriented suggestions based on the user's assessment and interaction context.
 
 ---
 
-## 5. Agent Responsibilities & Topology
+## Wellness Domains
 
-1. **Wellness Assessment Agent (`wellness_assessment`)**: Computes initial Multimodal Well-Being Index (MMWBI) across 6 domains and extracts psychometric & safety flags.
-2. **Reasoning & Router Agent (`reasoning_router`)**: Dynamic decision engine evaluating domain score deficits, completed agent history, and safety overrides.
-3. **Recovery & Wellness Agent (`recovery_wellness`)**: Evaluates sleep hygiene, circadian rhythm, daily fatigue, and calculates Recovery Wellness Index (RWI).
-4. **Physical Activity Agent (`physical_activity`)**: Evaluates physical movement & posture stability using real-time MoveNet keypoint analysis across *Savasana*, *Balasana*, and *Viparita Karani*.
-5. **Psychological Support Agent (`psychological_support`)**: Provides CBT-informed psychoeducation, supportive chat, and mood reflection. Features a deterministic safety gate for crisis escalation.
-6. **Professional Care Navigation Agent (`professional_care`)**: Safety-critical, deterministic pathway for urgent medical/psychiatric referral when acute risk flags are triggered.
-7. **Reassessment Loop Engine (`reassessment`)**: Evaluates post-intervention state to decide whether to loop back to the router or finish.
-8. **Wellness Plan Generator (`wellness_plan`)**: Terminal node synthesizing outputs into a comprehensive personal wellness plan.
+AarogyaMitra estimates wellness scores across six dimensions:
 
----
+| Domain | Description |
+|---|---|
+| Physical Health | General physical wellness and health-related indicators |
+| Sleep Recovery | Sleep duration, quality, consistency, and recovery |
+| Psychological Wellbeing | Emotional state and psychological wellness indicators |
+| Social Wellbeing | Social interaction and connectedness |
+| Lifestyle Balance | Daily habits, routines, and lifestyle patterns |
+| Stress Profile | Stress-related indicators and self-reported information |
 
-## 6. MongoDB Data Models
-
-* `User`: Authentication credentials.
-* `UserProfile`: User demographics, BMI, work pattern, education.
-* `WellnessSession`: Active LangGraph execution session, status, and serialized state snapshot.
-* `AgentExecution`: Structured log of every node execution (`agentName`, `nodeName`, `status`, `inputSummary`, `outputSummary`).
-* `AgentEvent`: Asynchronous event log for cross-agent signals (`CRISIS_DETECTED`, `HIGH_STRESS`, etc.).
-* `WellnessPlan`: Final synthesized multi-agent wellness plan.
-* `WellnessAssessment` & `WellnessResult`: Raw input responses and calculated domain scores.
-* `PsychometricAssessment`: Scores & individual item answers for WHO-5, PSS-10, GAD-7, PHQ-9.
-* `LifestyleBehavioralInput`: Physical activity minutes, sitting hours, diet, water intake.
-* `MedicalHealthProfile`: Chronic conditions, medications, physical limitations, physiological biomarkers.
-* `RecoveryProfile`: Detailed recovery metrics and RWI score log.
-* `PsychSupportSession`: Psychoeducation chat history & risk classification log.
-* `AgentJourney`: MongoDB navigation journey record.
+The six-domain assessment provides a consolidated wellness profile that helps identify areas requiring attention.
 
 ---
 
-## 7. API Endpoints Reference
+## System Architecture
 
-### Agentic & LangGraph Orchestration
-* `POST /api/agentic/start-session` — Initializes a new LangGraph wellness session.
-* `GET /api/agentic/session/:sessionId` — Retrieves current active graph state.
-* `POST /api/agentic/session/:sessionId/resume` — Resumes an interrupted graph step with user input.
-* `GET /api/agentic/session/:sessionId/timeline` — Returns real agent execution history from MongoDB.
-* `GET /api/langgraph/topology` — Returns DAG node & edge topology for visualizers.
+The system follows a modular, layered architecture that integrates user interaction, wellness assessment, machine learning, computer vision, agent orchestration, context management, and persistent storage.
 
-### Physical Activity & MoveNet Telemetry
-* `POST /api/physical-activity/report` — Stores MoveNet pose evaluation results and updates graph state.
-* `GET /api/physical-activity/history` — Retrieves historical pose assessment sessions.
+### Overall Workflow
 
-### Assessment & Journey
-* `POST /api/wellness/evaluate` — Triggers Wellness Assessment Agent & LangGraph workflow.
-* `GET /api/wellness/latest` — Fetches latest wellness assessment result, report, and journey.
+1. The user interacts with the React-based frontend.
+2. The user provides questionnaire responses, lifestyle information, sleep information, and other relevant inputs.
+3. The backend processes the collected information.
+4. The Random Forest Regressor estimates scores across six wellness domains.
+5. The generated wellness profile is passed to the agent orchestration workflow.
+6. LangGraph manages workflow state and determines agent execution paths.
+7. Specialized AI agents process the relevant wellness concerns.
+8. The MCP-based context layer provides controlled access to relevant user context.
+9. Agent outputs and relevant assessment information are persisted.
+10. The AI Wellness Assistant presents personalized wellness guidance and recommendations.
 
----
+### Specialized AI Agents
 
-## 8. Environment Variables
+| Agent | Responsibility |
+|---|---|
+| Psychological Support Agent | Provides supportive conversations and wellness guidance based on psychological screening and user-reported information |
+| Recovery and Wellness Agent | Evaluates sleep and recovery-related indicators and suggests suitable wellness activities |
+| Physical Activity Agent | Assesses yoga posture using computer vision and provides posture-related feedback |
+| Professional Support Navigation Agent | Helps users identify appropriate categories of professional support based on relevant risk indicators |
 
-Create a `.env` file in the root workspace (copying from `.env.example`):
+### Architecture Components
 
-```env
-PORT=5000
-MONGODB_URI=mongodb://localhost:27017/aarogya_mitra
-JWT_SECRET=your_jwt_signing_secret_here
-JWT_EXPIRES_IN=7d
-CLIENT_URL=http://localhost:5173
-ML_SERVICE_URL=http://localhost:8000
-```
-
----
-
-## 9. How to Run the Application
-
-### 1. Launch Client & Server Concurrently
-From the root workspace directory:
-```bash
-npm run dev
-```
-* **React Frontend**: Runs on `http://localhost:5173`
-* **Express Backend**: Runs on `http://localhost:5000`
-
-### 2. Launch Python ML Service (Optional)
-From the root directory:
-```bash
-cd ml-service
-python -m venv venv
-# Windows:
-.\venv\Scripts\activate
-# Unix/macOS:
-source venv/bin/activate
-
-pip install -r requirements.txt
-uvicorn app.main:app --port 8000 --reload
-```
+- Frontend and User Interaction Layer
+- Wellness Assessment and Preprocessing Layer
+- Machine Learning Prediction Module
+- Computer Vision and Pose Assessment Module
+- LangGraph Agent Orchestration Layer
+- MCP-Based Context Management Layer
+- Specialized AI Agents
+- MongoDB Persistence Layer
 
 ---
 
-## 10. Testing Dynamic Journeys
+## Technology Stack
 
-1. **Healthy User Journey**: High domain scores $\rightarrow$ `wellness_assessment` $\rightarrow$ `reasoning_router` $\rightarrow$ `recovery_wellness` $\rightarrow$ `wellness_plan`.
-2. **Elevated Stress & Poor Sleep**: Low recovery score $\rightarrow$ `recovery_wellness` $\rightarrow$ `reassessment` $\rightarrow$ `psychological_support` $\rightarrow$ `wellness_plan`.
-3. **Safety Override Scenario**: Severe PHQ-9 Q9 trigger or crisis phrase in chat $\rightarrow$ Safety Gate sets `crisisDetected=true` $\rightarrow$ Immediate override to `professional_care` (Professional Care Navigation).
+| Category | Technologies |
+|---|---|
+| Frontend | React.js, Tailwind CSS |
+| Backend | Python, FastAPI |
+| Machine Learning | Scikit-learn, Random Forest Regressor |
+| Computer Vision | MoveNet |
+| Agent Orchestration | LangGraph |
+| Context Integration | MCP-based service layer |
+| Database | MongoDB Community Edition |
+| OCR | Tesseract, PyTesseract |
+| LLM Integration | Google Gemini API |
+
+---
+
+## Machine Learning Methodology
+
+The machine learning component uses a Random Forest Regressor to estimate six wellness-domain scores.
+
+### Dataset Information
+
+- Dataset size: 25,000 synthetic records
+- Model: Random Forest Regressor
+- Number of estimators: 100
+- Maximum depth: 15
+- Missing-value handling: Median imputation
+- Categorical encoding: One-hot encoding
+- Random seed: 2026
+- Evaluation: Independent 80/20 train-test split
+
+### Reported Model Performance
+
+| Wellness Domain | MAE | MSE | RMSE | R² |
+|---|---:|---:|---:|---:|
+| Physical Health | 7.316 | 84.837 | 9.211 | 0.788 |
+| Sleep Recovery | 6.441 | 67.847 | 8.237 | 0.767 |
+| Psychological Wellbeing | 8.988 | 126.274 | 11.237 | 0.670 |
+| Social Wellbeing | 7.242 | 81.175 | 9.010 | 0.698 |
+| Lifestyle Balance | 2.544 | 32.184 | 5.673 | 0.912 |
+| Stress Profile | 7.494 | 88.432 | 9.404 | 0.790 |
+| **Mean** | **6.671** | **80.125** | **8.795** | **0.771** |
+
+**Note:** These results are based on synthetic data and an independent holdout evaluation. They do not establish clinical accuracy or real-world generalization.
+
+---
+
+## Computer Vision-Based Yoga Assessment
+
+The Physical Activity Agent incorporates computer vision to evaluate yoga posture.
+
+### Workflow
+
+1. Capture the user's posture using a camera.
+2. Detect body keypoints using MoveNet.
+3. Extract relevant body landmarks.
+4. Calculate relevant joint angles.
+5. Compare the detected posture with reference pose templates.
+6. Generate posture feedback based on the implemented scoring rules.
+
+### Evaluated Pose Templates
+
+- Savasana
+- Balasana
+- Viparita Karani
+
+The current prototype uses controlled reference templates. Further calibration and evaluation using expert-labelled real-world pose data are required.
+
+---
+
+## API Performance Evaluation
+
+The `/predict-domains` REST endpoint was evaluated using 60 sequential local requests.
+
+| Performance Metric | Result |
+|---|---:|
+| Requests Completed | 60/60 |
+| Mean Latency | 191.206 ms |
+| P95 Latency | 231.617 ms |
+| Throughput | 5.223 requests/second |
+| CPU Utilisation | 86.37% of one core |
+| Peak Memory | 781.75 MB |
+
+These results represent a local REST API benchmark and should not be interpreted as production-scale or LangGraph orchestration performance.
+
+---
+
+## Project Deliverables and Documentation
+
+The following section contains the academic documentation, presentations, research publication material, and project reports associated with AarogyaMitra.
+
+**Replace each `PASTE_LINK_HERE` with the corresponding Google Drive, GitHub, or institutional document URL. Ensure that shared documents have the appropriate viewing permissions.**
+
+| No. | Document / Deliverable | Link |
+|---:|---|---|
+| 1 | Complete Project Blackbook | [View Blackbook](https://docs.google.com/document/d/1F8LqPzgdp4-DY5ZBcnfOfMkTNUvToCdN5JbylOhult0/edit?usp=sharing) |
+| 2 | Project Logbook | [View Logbook](PASTE_LOGBOOK_LINK_HERE) |
+| 3 | Video Presentation / Project Demonstration | [Watch Video Presentation](PASTE_VIDEO_PRESENTATION_LINK_HERE) |
+| 4 | Review Presentation | [View Review Presentation](PASTE_REVIEW_PRESENTATION_LINK_HERE) |
+| 5 | Research Paper | [View Research Paper](PASTE_RESEARCH_PAPER_LINK_HERE) |
+| 6 | Research Paper Plagiarism Report | [View Plagiarism Report](PASTE_PLAGIARISM_REPORT_LINK_HERE) |
+| 7 | Capstone Project Report – I | [View Capstone Project Report – I](PASTE_CAPSTONE_REPORT_1_LINK_HERE) |
+| 8 | Capstone Project Report – II | [View Capstone Project Report – II](PASTE_CAPSTONE_REPORT_2_LINK_HERE) |
+
+---
+
+## Project Limitations
+
+The current prototype has the following limitations:
+
+- The machine learning model is trained using synthetic data rather than clinically collected patient data.
+- Model evaluation currently uses an independent 80/20 holdout split.
+- The yoga posture evaluation uses controlled reference templates and requires further real-world validation.
+- Some pose-scoring calibration inconsistencies require investigation.
+- The reported agent-routing evaluation is based on a limited set of manually designed scenarios.
+- The reported API benchmark does not measure complete LangGraph orchestration performance.
+- Clinical effectiveness and diagnostic accuracy have not been established.
+
+---
+
+## Future Scope
+
+Potential future improvements include:
+
+- Training and evaluating models using larger, diverse, ethically collected datasets.
+- Performing cross-validation and external model validation.
+- Improving yoga posture scoring through expert-labelled datasets.
+- Expanding agent-routing and safety test coverage.
+- Conducting dedicated LangGraph and context-layer performance evaluations.
+- Improving crisis-risk detection and safety mechanisms.
+- Integrating additional wellness data sources.
+- Conducting usability studies and expert evaluations.
+- Improving accessibility, scalability, and deployment reliability.
+
+---
+
+## Ethical Considerations and Disclaimer
+
+AarogyaMitra is designed as a wellness awareness and support platform.
+
+- Wellness scores are estimates, not clinical diagnoses.
+- Questionnaire responses are self-reported screening information.
+- AI-generated recommendations may contain errors and should be reviewed critically.
+- The platform does not replace qualified mental-health professionals or emergency services.
+- Sensitive wellness information should be handled with appropriate privacy, security, and access controls.
+
+---
+
+## Project Information
+
+**Project Name:** AarogyaMitra – Understanding Mind and Body
+
+**Project Category:** Agentic AI / Machine Learning / Computer Vision / Mental Wellbeing
+
+**Project Type:** Capstone Project–II
+
+**Academic Year:** 2026–27
+
+**Department:** Computer Engineering
+
+**Institution:** Vivekanand Education Society's Institute of Technology (VESIT)
+
+---
+
+## Acknowledgement
+
+This project has been developed as part of the Capstone Project–II academic curriculum. We express our gratitude to our project guide, department faculty, and institution for their guidance and support throughout the development of AarogyaMitra.
+
+---
+
+<p align="center">
+  <strong>AarogyaMitra – Understanding Mind and Body</strong><br/>
+  <em>Bringing AI-driven insights closer to holistic well-being.</em>
+</p>
